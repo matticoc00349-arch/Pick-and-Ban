@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>E-Sports Draft HUD</title>
-    
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -110,6 +109,20 @@
             opacity: 0.5;
         }
 
+        /* Super Troop Link Badge */
+        .super-troop-badge {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            font-size: 7px;
+            background: rgba(255, 165, 0, 0.2);
+            color: #ffa500;
+            padding: 1px 3px;
+            border-radius: 2px;
+            font-family: 'Orbitron', sans-serif;
+            border: 1px solid rgba(255, 165, 0, 0.4);
+        }
+
         /* Turn Animations */
         .turn-pulse-p1 { animation: pulse-border-p1 2s infinite; }
         @keyframes pulse-border-p1 {
@@ -134,7 +147,6 @@
     </style>
 </head>
 <body class="font-body h-screen flex flex-col antialiased">
-
     <!-- Header -->
     <header class="h-16 glass-panel border-b border-white/10 border-t-0 flex items-center justify-between px-6 z-20">
         <div class="flex items-center gap-3">
@@ -164,9 +176,7 @@
                 <h3 class="text-xs text-gray-400 uppercase tracking-widest mb-1 flex items-center gap-2">
                     <i class="ph ph-sword text-neon-blue"></i> Loadout
                 </h3>
-                <div id="p1-picks" class="flex flex-col gap-3">
-                    <!-- Picks injected here -->
-                </div>
+                <div id="p1-picks" class="flex flex-col gap-3 overflow-y-auto max-h-[calc(100vh-280px)]"></div>
             </div>
 
             <div class="h-auto border-t border-white/10 pt-4">
@@ -174,9 +184,7 @@
                     <span class="flex items-center gap-2"><i class="ph ph-prohibit text-red-500"></i> Bans</span>
                     <span id="p1-ban-count" class="text-[10px] bg-red-500/20 px-2 py-0.5 rounded text-red-400">0/3</span>
                 </h3>
-                <div id="p1-bans" class="flex justify-between gap-2">
-                    <!-- Bans injected here -->
-                </div>
+                <div id="p1-bans" class="flex justify-between gap-2"></div>
             </div>
         </aside>
 
@@ -184,11 +192,12 @@
         <section class="flex-1 flex flex-col h-full relative">
             
             <!-- Category Tabs -->
-            <div class="h-16 bg-black/40 border-b border-white/5 flex justify-center items-center gap-2 sm:gap-8 z-10 px-4">
-                <button class="tab-btn active text-neon-blue font-scifi font-bold tracking-widest uppercase border-b-2 border-neon-blue py-4 px-2 transition-all hover:text-neon-blue hover:brightness-125" data-target="heroes">Heroes (6)</button>
-                <button class="tab-btn text-gray-500 hover:text-gray-300 font-scifi font-medium tracking-widest uppercase border-b-2 border-transparent py-4 px-2 transition-all" data-target="troops">Troops (32)</button>
-                <button class="tab-btn text-gray-500 hover:text-gray-300 font-scifi font-medium tracking-widest uppercase border-b-2 border-transparent py-4 px-2 transition-all" data-target="spells">Spells (18)</button>
-                <button class="tab-btn text-gray-500 hover:text-gray-300 font-scifi font-medium tracking-widest uppercase border-b-2 border-transparent py-4 px-2 transition-all" data-target="equips">Equips (43)</button>
+            <div class="h-16 bg-black/40 border-b border-white/5 flex justify-center items-center gap-2 sm:gap-6 z-10 px-4">
+                <button class="tab-btn active text-neon-blue font-scifi font-bold tracking-widest uppercase border-b-2 border-neon-blue py-4 px-2 transition-all hover:text-neon-blue hover:brightness-125 text-xs sm:text-sm" data-target="heroes">Heroes (6)</button>
+                <button class="tab-btn text-gray-500 hover:text-gray-300 font-scifi font-medium tracking-widest uppercase border-b-2 border-transparent py-4 px-2 transition-all text-xs sm:text-sm" data-target="troops">Troops (32)</button>
+                <button class="tab-btn text-gray-500 hover:text-gray-300 font-scifi font-medium tracking-widest uppercase border-b-2 border-transparent py-4 px-2 transition-all text-xs sm:text-sm" data-target="supertroops">Super Troops (17)</button>
+                <button class="tab-btn text-gray-500 hover:text-gray-300 font-scifi font-medium tracking-widest uppercase border-b-2 border-transparent py-4 px-2 transition-all text-xs sm:text-sm" data-target="spells">Spells (18)</button>
+                <button class="tab-btn text-gray-500 hover:text-gray-300 font-scifi font-medium tracking-widest uppercase border-b-2 border-transparent py-4 px-2 transition-all text-xs sm:text-sm" data-target="equips">Equips (43)</button>
             </div>
 
             <!-- Context Bar -->
@@ -205,6 +214,7 @@
             <div class="flex-1 overflow-y-auto p-6 lg:p-8 relative">
                 <div id="grid-heroes" class="category-grid grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-3 lg:gap-4"></div>
                 <div id="grid-troops" class="category-grid grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-8 gap-3 lg:gap-4 hidden"></div>
+                <div id="grid-supertroops" class="category-grid grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-3 lg:gap-4 hidden"></div>
                 <div id="grid-spells" class="category-grid grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-8 gap-3 lg:gap-4 hidden"></div>
                 <div id="grid-equips" class="category-grid grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-8 gap-3 lg:gap-4 hidden"></div>
             </div>
@@ -221,9 +231,7 @@
                 <h3 class="text-xs text-gray-400 uppercase tracking-widest mb-1 flex items-center gap-2">
                     <i class="ph ph-sword text-neon-purple"></i> Loadout
                 </h3>
-                <div id="p2-picks" class="flex flex-col gap-3">
-                    <!-- Picks injected here -->
-                </div>
+                <div id="p2-picks" class="flex flex-col gap-3 overflow-y-auto max-h-[calc(100vh-280px)]"></div>
             </div>
 
             <div class="h-auto border-t border-white/10 pt-4">
@@ -231,9 +239,7 @@
                     <span class="flex items-center gap-2"><i class="ph ph-prohibit text-red-500"></i> Bans</span>
                     <span id="p2-ban-count" class="text-[10px] bg-red-500/20 px-2 py-0.5 rounded text-red-400">0/3</span>
                 </h3>
-                <div id="p2-bans" class="flex justify-between gap-2">
-                    <!-- Bans injected here -->
-                </div>
+                <div id="p2-bans" class="flex justify-between gap-2"></div>
             </div>
         </aside>
     </main>
@@ -259,9 +265,7 @@
         </div>
     </div>
 
-    <!-- Online Firebase Logic -->
     <script type="module">
-        // --- GAME DATA GENERATION ---
         const generateItems = (prefix, count, namePrefix, cat) => {
             return Array.from({length: count}, (_, i) => ({
                 id: `${prefix}${i+1}`,
@@ -271,16 +275,35 @@
             }));
         };
 
+        const SUPER_TROOPS_DATA = [
+            { id: 'st1', name: 'Super Barbarian', category: 'supertroops', short: 'S.Barb', baseTroopId: 't1' },
+            { id: 'st2', name: 'Super Archer', category: 'supertroops', short: 'S.Arch', baseTroopId: 't2' },
+            { id: 'st3', name: 'Super Giant', category: 'supertroops', short: 'S.Giant', baseTroopId: 't3' },
+            { id: 'st4', name: 'Sneaky Goblin', category: 'supertroops', short: 'Sneaky', baseTroopId: 't4' },
+            { id: 'st5', name: 'Super Wall Breaker', category: 'supertroops', short: 'S.WB', baseTroopId: 't5' },
+            { id: 'st6', name: 'Rocket Balloon', category: 'supertroops', short: 'Rocket', baseTroopId: 't6' },
+            { id: 'st7', name: 'Super Wizard', category: 'supertroops', short: 'S.Wiz', baseTroopId: 't7' },
+            { id: 'st8', name: 'Super Dragon', category: 'supertroops', short: 'S.Drag', baseTroopId: 't8' },
+            { id: 'st9', name: 'Inferno Dragon', category: 'supertroops', short: 'Inf.Drag', baseTroopId: 't9' },
+            { id: 'st10', name: 'Super Minion', category: 'supertroops', short: 'S.Minion', baseTroopId: 't10' },
+            { id: 'st11', name: 'Super Valkyrie', category: 'supertroops', short: 'S.Valk', baseTroopId: 't11' },
+            { id: 'st12', name: 'Super Witch', category: 'supertroops', short: 'S.Witch', baseTroopId: 't12' },
+            { id: 'st13', name: 'Ice Hound', category: 'supertroops', short: 'IceHound', baseTroopId: 't13' },
+            { id: 'st14', name: 'Super Bowler', category: 'supertroops', short: 'S.Bowl', baseTroopId: 't14' },
+            { id: 'st15', name: 'Super Hog Rider', category: 'supertroops', short: 'S.Hog', baseTroopId: 't15' },
+            { id: 'st16', name: 'Headhunter', category: 'supertroops', short: 'Headh.', baseTroopId: 't16' },
+            { id: 'st17', name: 'Apprentice Warden', category: 'supertroops', short: 'App.Ward', baseTroopId: 't17' }
+        ];
+
         const GAME_DATA = [
             ...generateItems('h', 6, 'Hero', 'heroes'),
             ...generateItems('t', 32, 'Troop', 'troops'),
+            ...SUPER_TROOPS_DATA,
             ...generateItems('s', 18, 'Spell', 'spells'),
             ...generateItems('e', 43, 'Equip', 'equips')
         ];
 
         const ITEM_MAP = GAME_DATA.reduce((acc, item) => { acc[item.id] = item; return acc; }, {});
-
-        // --- MULTI-TAB SYNC (Ersetzt Firebase für fehlerfreies Testen) ---
         const PICK_SEQUENCE = ['player1', 'player2', 'player2', 'player1', 'player1', 'player2'];
         
         let serverState = null;
@@ -288,7 +311,6 @@
         let userId = 'user_' + Math.random().toString(36).substr(2, 9);
         let localTempBans = [];
         
-        // BroadcastChannel verbindet alle offenen Tabs auf deinem Rechner in Echtzeit
         const channel = new BroadcastChannel('draft-sync-channel');
 
         channel.onmessage = (event) => {
@@ -305,7 +327,6 @@
             render();
         }
 
-        // --- DOM ELEMENTS ---
         const UI = {
             modal: document.getElementById('modal-overlay'),
             modalError: document.getElementById('modal-error'),
@@ -316,12 +337,12 @@
             grids: {
                 heroes: document.getElementById('grid-heroes'),
                 troops: document.getElementById('grid-troops'),
+                supertroops: document.getElementById('grid-supertroops'),
                 spells: document.getElementById('grid-spells'),
                 equips: document.getElementById('grid-equips')
             }
         };
 
-        // --- INITIALIZATION ---
         function init() {
             buildGrids();
             setupTabs();
@@ -330,12 +351,8 @@
             document.getElementById('join-p1-btn').addEventListener('click', () => joinAs('p1'));
             document.getElementById('join-p2-btn').addEventListener('click', () => joinAs('p2'));
             document.getElementById('join-spec-btn').addEventListener('click', () => joinAs('spec'));
-            
-            UI.btnReset.addEventListener('click', () => {
-                resetRoom();
-            });
+            UI.btnReset.addEventListener('click', () => resetRoom());
 
-            // Lade gespeicherten Zustand (falls vorhanden) oder starte neu
             const savedState = localStorage.getItem('draft_state');
             if (savedState) {
                 serverState = JSON.parse(savedState);
@@ -396,9 +413,10 @@
             }
         }
 
-        // --- INTERACTIONS ---
         function handleItemClick(itemId) {
             if (!serverState || userRole === 'spec') return;
+
+            if (isItemDisabled(itemId)) return;
 
             if (serverState.phase === 'BANS') {
                 if (userRole === 'p1' && serverState.p1BansLocked) return;
@@ -413,8 +431,6 @@
                 render();
             }
             else if (serverState.phase === 'PICKS') {
-                if (serverState.globalBans.includes(itemId) || serverState.p1Picks.includes(itemId) || serverState.p2Picks.includes(itemId)) return;
-
                 const activePlayer = PICK_SEQUENCE[serverState.pickIndex];
                 if (activePlayer === 'player1' && userRole !== 'p1') return; 
                 if (activePlayer === 'player2' && userRole !== 'p2') return; 
@@ -433,24 +449,62 @@
             }
         }
 
+        function isItemDisabled(itemId) {
+            const item = ITEM_MAP[itemId];
+            if (!item) return false;
+
+            if (serverState.globalBans.includes(itemId) || serverState.p1Picks.includes(itemId) || serverState.p2Picks.includes(itemId)) {
+                return true;
+            }
+
+            if (item.baseTroopId) {
+                const bId = item.baseTroopId;
+                if (serverState.globalBans.includes(bId) || serverState.p1Picks.includes(bId) || serverState.p2Picks.includes(bId)) {
+                    return true;
+                }
+            }
+
+            const relatedSuper = SUPER_TROOPS_DATA.find(st => st.baseTroopId === itemId);
+            if (relatedSuper) {
+                const sId = relatedSuper.id;
+                if (serverState.globalBans.includes(sId) || serverState.p1Picks.includes(sId) || serverState.p2Picks.includes(sId)) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         function handleActionClick() {
             if (!serverState || userRole === 'spec') return;
 
             if (serverState.phase === 'BANS' && localTempBans.length === 3) {
                 const updates = {};
+                const expandedBans = [...localTempBans];
+                localTempBans.forEach(id => {
+                    const itm = ITEM_MAP[id];
+                    if (itm.baseTroopId && !expandedBans.includes(itm.baseTroopId)) {
+                        expandedBans.push(itm.baseTroopId);
+                    }
+                    const relSuper = SUPER_TROOPS_DATA.find(st => st.baseTroopId === id);
+                    if (relSuper && !expandedBans.includes(relSuper.id)) {
+                        expandedBans.push(relSuper.id);
+                    }
+                });
+
                 if (userRole === 'p1') {
-                    updates.p1Bans = localTempBans;
+                    updates.p1Bans = expandedBans;
                     updates.p1BansLocked = true;
                     if (serverState.p2BansLocked) {
                         updates.phase = 'REVEAL';
-                        updates.globalBans = [...new Set([...localTempBans, ...serverState.p2Bans])];
+                        updates.globalBans = [...new Set([...expandedBans, ...serverState.p2Bans])];
                     }
                 } else if (userRole === 'p2') {
-                    updates.p2Bans = localTempBans;
+                    updates.p2Bans = expandedBans;
                     updates.p2BansLocked = true;
                     if (serverState.p1BansLocked) {
                         updates.phase = 'REVEAL';
-                        updates.globalBans = [...new Set([...serverState.p1Bans, ...localTempBans])];
+                        updates.globalBans = [...new Set([...serverState.p1Bans, ...expandedBans])];
                     }
                 }
                 updateServer(updates);
@@ -460,11 +514,9 @@
             }
         }
 
-        // --- RENDER LOGIC ---
         function render() {
             if(!serverState) return;
 
-            // Falls der Raum von einem anderen Tab zurückgesetzt wurde, Rolle löschen und Lobby zeigen
             if (serverState.phase === 'WAITING') {
                 if ((userRole === 'p1' && !serverState.p1Id) || (userRole === 'p2' && !serverState.p2Id)) {
                     userRole = null;
@@ -475,44 +527,47 @@
                 UI.modal.style.display = 'flex';
             }
 
-            // Status Bar (Fallback auf 'NONE', falls userRole noch null ist)
             const roleDisplay = userRole ? userRole.toUpperCase() : 'NONE';
             UI.statusText.textContent = `ONLINE | PHASE: ${serverState.phase} | ROLE: ${roleDisplay}`;
 
-            // Reset Item Cards
             document.querySelectorAll('.item-card').forEach(card => {
                 const id = card.dataset.id;
-                card.className = 'item-card relative h-16 bg-white/5 border border-white/10 rounded flex items-center justify-center font-scifi font-bold text-lg select-none';
-                card.innerHTML = ITEM_MAP[id].short;
+                const item = ITEM_MAP[id];
+                card.className = 'item-card relative h-16 bg-white/5 border border-white/10 rounded flex flex-col items-center justify-center font-scifi font-bold text-sm select-none p-1';
+                card.innerHTML = `<span>${item.short}</span>`;
                 
-                // Color coding
-                const cat = ITEM_MAP[id].category;
+                if (item.baseTroopId) {
+                    const badge = document.createElement('span');
+                    badge.className = 'super-troop-badge';
+                    badge.textContent = 'SUPER';
+                    card.appendChild(badge);
+                }
+                
+                const cat = item.category;
                 if(cat==='heroes') card.classList.add('text-yellow-400');
                 if(cat==='troops') card.classList.add('text-pink-400');
+                if(cat==='supertroops') card.classList.add('text-orange-400');
                 if(cat==='spells') card.classList.add('text-blue-400');
                 if(cat==='equips') card.classList.add('text-purple-400');
 
-                // State Visuals
                 if (serverState.phase === 'BANS') {
                     if (localTempBans.includes(id)) {
                         card.classList.add('selected-ban');
                     }
                 } 
                 else if (serverState.phase === 'REVEAL' || serverState.phase === 'PICKS' || serverState.phase === 'SUMMARY') {
-                    if (serverState.globalBans.includes(id)) {
+                    if (isItemDisabled(id)) {
                         card.classList.add('banned');
-                        card.innerHTML = `<span class="opacity-50 line-through">${ITEM_MAP[id].short}</span>`;
+                        card.innerHTML = `<span class="opacity-50 line-through text-xs">${item.short}</span>`;
                     }
                     if (serverState.p1Picks.includes(id)) card.classList.add('picked-p1');
                     if (serverState.p2Picks.includes(id)) card.classList.add('picked-p2');
                 }
             });
 
-            // Update Sidebars
             updateSidebar('player1');
             updateSidebar('player2');
 
-            // Action Button & Instructions
             UI.actionBtn.classList.add('hidden');
             UI.actionBtn.onclick = handleActionClick;
             
@@ -538,7 +593,7 @@
                 }
             }
             else if (serverState.phase === 'REVEAL') {
-                UI.instructionText.innerHTML = "DAS SIND DIE GLOBALEN BANS.";
+                UI.instructionText.innerHTML = "DAS SIND DIE GLOBALEN BANS (INKL. SUPER-TRUPPEN-VERKNÜPFUNG).";
                 if (userRole === 'p1' || userRole === 'p2') {
                     UI.actionBtn.classList.remove('hidden');
                     UI.actionBtn.textContent = 'WEITER ZU DEN PICKS';
@@ -567,10 +622,8 @@
             const isP1 = playerSlot === 'player1';
             const colorClass = isP1 ? 'text-neon-blue' : 'text-neon-purple';
             const borderClass = isP1 ? 'border-neon-blue/30' : 'border-neon-purple/30';
-            
             const statusEl = document.getElementById(`${isP1 ? 'p1' : 'p2'}-status`);
             
-            // Status Text
             if (serverState.phase === 'WAITING') {
                 const isJoined = isP1 ? serverState.p1Id : serverState.p2Id;
                 statusEl.textContent = isJoined ? 'Ready' : 'Waiting...';
@@ -581,7 +634,6 @@
             }
             else statusEl.textContent = 'Ready';
             
-            // Bans
             const banContainer = document.getElementById(`${isP1 ? 'p1' : 'p2'}-bans`);
             const countEl = document.getElementById(`${isP1 ? 'p1' : 'p2'}-ban-count`);
             banContainer.innerHTML = '';
@@ -590,14 +642,17 @@
             let displayCount = 0;
             
             if (serverState.phase === 'BANS') {
-                // Eigene Bans lokal anzeigen, gegnerische Bans verstecken
                 if (isP1 && userRole === 'p1') { banList = localTempBans; displayCount = localTempBans.length; }
                 else if (!isP1 && userRole === 'p2') { banList = localTempBans; displayCount = localTempBans.length; }
                 else if (isP1 && serverState.p1BansLocked) { banList = ['?', '?', '?']; displayCount = 3; }
                 else if (!isP1 && serverState.p2BansLocked) { banList = ['?', '?', '?']; displayCount = 3; }
             } 
             else if (serverState.phase !== 'WAITING') {
-                banList = isP1 ? serverState.p1Bans : serverState.p2Bans;
+                const rawBans = isP1 ? serverState.p1Bans : serverState.p2Bans;
+                banList = rawBans.filter(bId => {
+                    const itm = ITEM_MAP[bId];
+                    return !itm.baseTroopId; 
+                }).slice(0, 3);
                 displayCount = banList.length;
             }
 
@@ -613,21 +668,20 @@
                         box.classList.add('border-red-500/30');
                     } else {
                         const item = ITEM_MAP[banList[i]];
-                        box.textContent = item.short;
+                        box.textContent = item ? item.short : '';
                         box.classList.add('border-red-500/50', 'bg-red-500/10');
                     }
                 }
                 banContainer.appendChild(box);
             }
 
-            // Picks
             const pickContainer = document.getElementById(`${isP1 ? 'p1' : 'p2'}-picks`);
             pickContainer.innerHTML = '';
             const picks = isP1 ? serverState.p1Picks : serverState.p2Picks;
             
             for(let i=0; i<3; i++) {
                 const box = document.createElement('div');
-                box.className = `h-12 bg-black/50 border ${borderClass} rounded flex items-center justify-center text-sm font-bold font-scifi ${colorClass}`;
+                box.className = `h-12 bg-black/50 border ${borderClass} rounded flex items-center justify-center text-xs font-bold font-scifi ${colorClass} px-1 text-center`;
                 if (picks[i]) {
                     const item = ITEM_MAP[picks[i]];
                     box.textContent = item.name;
@@ -640,14 +694,20 @@
             }
         }
 
-        // --- SETUP DOM ---
         function buildGrids() {
             GAME_DATA.forEach(item => {
                 const el = document.createElement('div');
-                el.className = 'item-card relative h-16 bg-white/5 border border-white/10 rounded flex items-center justify-center font-scifi font-bold text-lg select-none';
+                el.className = 'item-card relative h-16 bg-white/5 border border-white/10 rounded flex flex-col items-center justify-center font-scifi font-bold text-sm select-none p-1';
                 el.dataset.id = item.id;
                 el.title = item.name;
-                el.textContent = item.short;
+                el.innerHTML = `<span>${item.short}</span>`;
+                
+                if (item.baseTroopId) {
+                    const badge = document.createElement('span');
+                    badge.className = 'super-troop-badge';
+                    badge.textContent = 'SUPER';
+                    el.appendChild(badge);
+                }
                 
                 el.addEventListener('click', () => handleItemClick(item.id));
                 UI.grids[item.category].appendChild(el);
@@ -673,9 +733,7 @@
             });
         }
 
-        // Start
         window.addEventListener('DOMContentLoaded', init);
-
     </script>
 </body>
 </html>
