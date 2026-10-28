@@ -66,6 +66,7 @@
             cursor: pointer;
             position: relative;
             overflow: hidden;
+            height: 96px; /* Höhere Karten für Name + Bild */
         }
         .item-card::before {
             content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 100%);
@@ -73,7 +74,7 @@
         }
         .item-card:hover:not(.disabled)::before { opacity: 1; }
         .item-card:hover:not(.disabled) {
-            transform: translateY(-2px) scale(1.05);
+            transform: translateY(-2px) scale(1.03);
             box-shadow: 0 0 15px rgba(0, 243, 255, 0.4);
             border-color: rgba(0, 243, 255, 0.8);
             z-index: 10;
@@ -114,28 +115,13 @@
             position: absolute;
             top: 2px;
             right: 2px;
-            font-size: 7px;
+            font-size: 6px;
             background: rgba(255, 165, 0, 0.2);
             color: #ffa500;
             padding: 1px 3px;
             border-radius: 2px;
             font-family: 'Orbitron', sans-serif;
             border: 1px solid rgba(255, 165, 0, 0.4);
-        }
-
-        /* Turn Animations */
-        .turn-pulse-p1 { animation: pulse-border-p1 2s infinite; }
-        @keyframes pulse-border-p1 {
-            0% { box-shadow: 0 0 0 0 rgba(0, 243, 255, 0.4); }
-            70% { box-shadow: 0 0 0 10px rgba(0, 243, 255, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(0, 243, 255, 0); }
-        }
-
-        .turn-pulse-p2 { animation: pulse-border-p2 2s infinite; }
-        @keyframes pulse-border-p2 {
-            0% { box-shadow: 0 0 0 0 rgba(188, 19, 254, 0.4); }
-            70% { box-shadow: 0 0 0 10px rgba(188, 19, 254, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(188, 19, 254, 0); }
         }
 
         /* Modals */
@@ -157,7 +143,7 @@
             CONNECTING...
         </div>
         <div class="flex gap-4">
-            <button id="btn-show-join" class="hidden text-xs px-4 py-1.5 bg-white/5 border border-white/20 rounded hover:bg-white/10 transition">CHANGE SLOT</button>
+            <button id="btn-show-join" class="text-xs px-4 py-1.5 bg-white/5 border border-white/20 rounded hover:bg-white/10 transition">CHANGE SLOT</button>
             <button id="btn-reset" class="text-xs px-4 py-1.5 border border-red-500/50 rounded text-red-400 hover:bg-red-500/10 transition">RESET ROOM</button>
         </div>
     </header>
@@ -213,10 +199,10 @@
             <!-- Item Grids -->
             <div class="flex-1 overflow-y-auto p-6 lg:p-8 relative">
                 <div id="grid-heroes" class="category-grid grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-3 lg:gap-4"></div>
-                <div id="grid-troops" class="category-grid grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-8 gap-3 lg:gap-4 hidden"></div>
+                <div id="grid-troops" class="category-grid grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-3 lg:gap-4 hidden"></div>
                 <div id="grid-supertroops" class="category-grid grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-3 lg:gap-4 hidden"></div>
-                <div id="grid-spells" class="category-grid grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-8 gap-3 lg:gap-4 hidden"></div>
-                <div id="grid-equips" class="category-grid grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-8 gap-3 lg:gap-4 hidden"></div>
+                <div id="grid-spells" class="category-grid grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-3 lg:gap-4 hidden"></div>
+                <div id="grid-equips" class="category-grid grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-3 lg:gap-4 hidden"></div>
             </div>
         </section>
 
@@ -248,7 +234,7 @@
     <div id="modal-overlay" class="flex modal-overlay">
         <div class="glass-panel p-8 rounded-xl max-w-md w-full text-center border-t border-neon-blue">
             <h2 id="modal-title" class="font-scifi text-2xl font-bold text-white mb-4">ONLINE DRAFT LOBBY</h2>
-            <p id="modal-desc" class="text-gray-400 mb-8 text-sm">Wähle deine Rolle für das Match.</p>
+            <p id="modal-desc" class="text-gray-400 mb-8 text-sm">Wähle deine Rolle oder teste frei.</p>
             
             <div id="modal-actions" class="flex flex-col gap-3">
                 <button id="join-p1-btn" class="w-full py-3 bg-neon-blue/10 border border-neon-blue text-neon-blue font-scifi font-bold rounded hover:bg-neon-blue hover:text-black transition shadow-[0_0_15px_rgba(0,243,255,0.2)]">
@@ -258,7 +244,7 @@
                     JOIN AS PLAYER 2
                 </button>
                 <button id="join-spec-btn" class="w-full py-2 border border-gray-600 text-gray-400 font-scifi rounded hover:bg-gray-800 transition mt-2">
-                    SPECTATE
+                    FREIER TEST (BEIDE SEITEN)
                 </button>
             </div>
             <div id="modal-error" class="text-red-500 text-xs mt-4 hidden font-bold tracking-widest">SLOT BEREITS BELEGT!</div>
@@ -277,23 +263,23 @@
         };
 
         const SUPER_TROOPS_DATA = [
-            { id: 'st1', name: 'Super Barbarian', category: 'supertroops', short: 'S.Barb', baseTroopId: 't1', img: 'Supertroops/super_barbarian.png' },
-            { id: 'st2', name: 'Super Archer', category: 'supertroops', short: 'S.Arch', baseTroopId: 't2', img: 'Supertroops/super_archer.png' },
-            { id: 'st3', name: 'Sneaky Goblin', category: 'supertroops', short: 'Sneaky', baseTroopId: 't4', img: 'Supertroops/sneaky_goblin.png' },
-            { id: 'st4', name: 'Super Wall Breaker', category: 'supertroops', short: 'S.WB', baseTroopId: 't5', img: 'Supertroops/super_wall_breaker.png' },
-            { id: 'st5', name: 'Super Giant', category: 'supertroops', short: 'S.Giant', baseTroopId: 't3', img: 'Supertroops/super_giant.png' },
-            { id: 'st6', name: 'Rocket Balloon', category: 'supertroops', short: 'Rocket', baseTroopId: 't6', img: 'Supertroops/rocket_balloon.png' },
-            { id: 'st7', name: 'Super Wizard', category: 'supertroops', short: 'S.Wiz', baseTroopId: 't7', img: 'Supertroops/super_wizard.png' },
-            { id: 'st8', name: 'Super Dragon', category: 'supertroops', short: 'S.Drag', baseTroopId: 't8', img: 'Supertroops/super_dragon.png' },
-            { id: 'st9', name: 'Inferno Dragon', category: 'supertroops', short: 'Inf.Drag', baseTroopId: 't9', img: 'Supertroops/inferno_dragon.png' },
-            { id: 'st10', name: 'Super Minion', category: 'supertroops', short: 'S.Minion', baseTroopId: 't10', img: 'Supertroops/super_minion.png' },
-            { id: 'st11', name: 'Super Valkyrie', category: 'supertroops', short: 'S.Valk', baseTroopId: 't11', img: 'Supertroops/super_valkyrie.png' },
-            { id: 'st12', name: 'Super Witch', category: 'supertroops', short: 'S.Witch', baseTroopId: 't12', img: 'Supertroops/super_witch.png' },
-            { id: 'st13', name: 'Ice Hound', category: 'supertroops', short: 'IceHound', baseTroopId: 't13', img: 'Supertroops/ice_hound.png' },
-            { id: 'st14', name: 'Super Bowler', category: 'supertroops', short: 'S.Bowl', baseTroopId: 't14', img: 'Supertroops/super_bowler.png' },
-            { id: 'st15', name: 'Super Miner', category: 'supertroops', short: 'S.Miner', baseTroopId: 't15', img: 'Supertroops/super_miner.png' },
-            { id: 'st16', name: 'Super Yeti', category: 'supertroops', short: 'S.Yeti', baseTroopId: 't16', img: 'Supertroops/super_yeti.png' },
-            { id: 'st17', name: 'Super Hog Rider', category: 'supertroops', short: 'S.Hog', baseTroopId: 't17', img: 'Supertroops/super_hog_rider.png' }
+            { id: 'st1', name: 'Super Barbarian', category: 'supertroops', short: 'Super Barbarian', baseTroopId: 't1', img: 'Supertroops/super_barbarian.png' },
+            { id: 'st2', name: 'Super Archer', category: 'supertroops', short: 'Super Archer', baseTroopId: 't2', img: 'Supertroops/super_archer.png' },
+            { id: 'st3', name: 'Sneaky Goblin', category: 'supertroops', short: 'Sneaky Goblin', baseTroopId: 't4', img: 'Supertroops/sneaky_goblin.png' },
+            { id: 'st4', name: 'Super Wall Breaker', category: 'supertroops', short: 'Super Wall Breaker', baseTroopId: 't5', img: 'Supertroops/super_wall_breaker.png' },
+            { id: 'st5', name: 'Super Giant', category: 'supertroops', short: 'Super Giant', baseTroopId: 't3', img: 'Supertroops/super_giant.png' },
+            { id: 'st6', name: 'Rocket Balloon', category: 'supertroops', short: 'Rocket Balloon', baseTroopId: 't6', img: 'Supertroops/rocket_balloon.png' },
+            { id: 'st7', name: 'Super Wizard', category: 'supertroops', short: 'Super Wizard', baseTroopId: 't7', img: 'Supertroops/super_wizard.png' },
+            { id: 'st8', name: 'Super Dragon', category: 'supertroops', short: 'Super Dragon', baseTroopId: 't8', img: 'Supertroops/super_dragon.png' },
+            { id: 'st9', name: 'Inferno Dragon', category: 'supertroops', short: 'Inferno Dragon', baseTroopId: 't9', img: 'Supertroops/inferno_dragon.png' },
+            { id: 'st10', name: 'Super Minion', category: 'supertroops', short: 'Super Minion', baseTroopId: 't10', img: 'Supertroops/super_minion.png' },
+            { id: 'st11', name: 'Super Valkyrie', category: 'supertroops', short: 'Super Valkyrie', baseTroopId: 't11', img: 'Supertroops/super_valkyrie.png' },
+            { id: 'st12', name: 'Super Witch', category: 'supertroops', short: 'Super Witch', baseTroopId: 't12', img: 'Supertroops/super_witch.png' },
+            { id: 'st13', name: 'Ice Hound', category: 'supertroops', short: 'Ice Hound', baseTroopId: 't13', img: 'Supertroops/ice_hound.png' },
+            { id: 'st14', name: 'Super Bowler', category: 'supertroops', short: 'Super Bowler', baseTroopId: 't14', img: 'Supertroops/super_bowler.png' },
+            { id: 'st15', name: 'Super Miner', category: 'supertroops', short: 'Super Miner', baseTroopId: 't15', img: 'Supertroops/super_miner.png' },
+            { id: 'st16', name: 'Super Yeti', category: 'supertroops', short: 'Super Yeti', baseTroopId: 't16', img: 'Supertroops/super_yeti.png' },
+            { id: 'st17', name: 'Super Hog Rider', category: 'supertroops', short: 'Super Hog Rider', baseTroopId: 't17', img: 'Supertroops/super_hog_rider.png' }
         ];
 
         const GAME_DATA = [
@@ -308,7 +294,7 @@
         const PICK_SEQUENCE = ['player1', 'player2', 'player2', 'player1', 'player1', 'player2'];
         
         let serverState = null;
-        let userRole = null; 
+        let userRole = 'p1'; // Standardmäßig uneingeschränkt zum Testen
         let userId = 'user_' + Math.random().toString(36).substr(2, 9);
         let localTempBans = [];
         
@@ -335,6 +321,7 @@
             instructionText: document.getElementById('instruction-text'),
             actionBtn: document.getElementById('action-btn'),
             btnReset: document.getElementById('btn-reset'),
+            btnShowJoin: document.getElementById('btn-show-join'),
             grids: {
                 heroes: document.getElementById('grid-heroes'),
                 troops: document.getElementById('grid-troops'),
@@ -347,12 +334,15 @@
         function init() {
             buildGrids();
             setupTabs();
-            UI.modal.style.display = 'flex'; 
 
             document.getElementById('join-p1-btn').addEventListener('click', () => joinAs('p1'));
             document.getElementById('join-p2-btn').addEventListener('click', () => joinAs('p2'));
             document.getElementById('join-spec-btn').addEventListener('click', () => joinAs('spec'));
+            
             UI.btnReset.addEventListener('click', () => resetRoom());
+            UI.btnShowJoin.addEventListener('click', () => {
+                UI.modal.style.display = 'flex';
+            });
 
             const savedState = localStorage.getItem('draft_state');
             if (savedState) {
@@ -365,63 +355,34 @@
 
         function resetRoom() {
             serverState = {
-                phase: 'WAITING', 
-                p1Id: null, p2Id: null,
+                phase: 'BANS', 
+                p1Id: userId, p2Id: userId,
                 p1Bans: [], p2Bans: [], globalBans: [],
-                p1BansLocked: false, p2BansLocked: false,
+                p1BansLocked: true, p2BansLocked: true,
                 p1Picks: [], p2Picks: [],
                 pickIndex: 0
             };
             localTempBans = [];
-            userRole = null;
-            UI.modal.style.display = 'flex'; 
+            userRole = 'p1';
+            UI.modal.style.display = 'none';
             updateServer({});
         }
 
         function joinAs(role) {
             if(!serverState) return;
-            const updates = {};
-            
-            if (role === 'p1') {
-                if (serverState.p1Id && serverState.p1Id !== userId) {
-                    UI.modalError.classList.remove('hidden'); return;
-                }
-                updates.p1Id = userId;
-                userRole = 'p1';
-            } else if (role === 'p2') {
-                if (serverState.p2Id && serverState.p2Id !== userId) {
-                    UI.modalError.classList.remove('hidden'); return;
-                }
-                updates.p2Id = userId;
-                userRole = 'p2';
-            } else {
-                userRole = 'spec';
+            userRole = role === 'spec' ? 'p1' : role; // Erlaubt flüssiges Testen ohne Blockade
+            if (serverState.phase === 'WAITING') {
+                serverState.phase = 'BANS';
             }
-
-            const currP1 = updates.p1Id || serverState.p1Id;
-            const currP2 = updates.p2Id || serverState.p2Id;
-            if (currP1 && currP2 && serverState.phase === 'WAITING') {
-                updates.phase = 'BANS';
-            }
-
-            UI.modalError.classList.add('hidden');
             UI.modal.style.display = 'none'; 
-            
-            if(Object.keys(updates).length > 0) {
-                updateServer(updates);
-            } else {
-                render();
-            }
+            updateServer({});
         }
 
         function handleItemClick(itemId) {
-            if (!serverState || userRole === 'spec') return;
+            if (!serverState) return;
             if (isItemDisabled(itemId)) return;
 
             if (serverState.phase === 'BANS') {
-                if (userRole === 'p1' && serverState.p1BansLocked) return;
-                if (userRole === 'p2' && serverState.p2BansLocked) return;
-
                 const idx = localTempBans.indexOf(itemId);
                 if (idx > -1) {
                     localTempBans.splice(idx, 1);
@@ -431,12 +392,8 @@
                 render();
             }
             else if (serverState.phase === 'PICKS') {
-                const activePlayer = PICK_SEQUENCE[serverState.pickIndex];
-                if (activePlayer === 'player1' && userRole !== 'p1') return; 
-                if (activePlayer === 'player2' && userRole !== 'p2') return; 
-
                 const updates = { pickIndex: serverState.pickIndex + 1 };
-                if (activePlayer === 'player1') {
+                if (serverState.pickIndex % 2 === 0) {
                     updates.p1Picks = [...serverState.p1Picks, itemId];
                 } else {
                     updates.p2Picks = [...serverState.p2Picks, itemId];
@@ -476,10 +433,9 @@
         }
 
         function handleActionClick() {
-            if (!serverState || userRole === 'spec') return;
+            if (!serverState) return;
 
             if (serverState.phase === 'BANS' && localTempBans.length === 3) {
-                const updates = {};
                 const expandedBans = [...localTempBans];
                 localTempBans.forEach(id => {
                     const itm = ITEM_MAP[id];
@@ -492,68 +448,46 @@
                     }
                 });
 
-                if (userRole === 'p1') {
-                    updates.p1Bans = expandedBans;
-                    updates.p1BansLocked = true;
-                    if (serverState.p2BansLocked) {
-                        updates.phase = 'REVEAL';
-                        updates.globalBans = [...new Set([...expandedBans, ...serverState.p2Bans])];
-                    }
-                } else if (userRole === 'p2') {
-                    updates.p2Bans = expandedBans;
-                    updates.p2BansLocked = true;
-                    if (serverState.p1BansLocked) {
-                        updates.phase = 'REVEAL';
-                        updates.globalBans = [...new Set([...serverState.p1Bans, ...expandedBans])];
-                    }
-                }
-                updateServer(updates);
+                updateServer({
+                    p1Bans: expandedBans,
+                    p2Bans: expandedBans,
+                    globalBans: expandedBans,
+                    phase: 'REVEAL',
+                    p1BansLocked: true,
+                    p2BansLocked: true
+                });
             }
             else if (serverState.phase === 'REVEAL') {
-                updateServer({ phase: 'PICKS' });
+                updateServer({ phase: 'PICKS', pickIndex: 0 });
             }
         }
 
         function render() {
             if(!serverState) return;
 
-            if (serverState.phase === 'WAITING') {
-                if ((userRole === 'p1' && !serverState.p1Id) || (userRole === 'p2' && !serverState.p2Id)) {
-                    userRole = null;
-                    localTempBans = [];
-                }
-            }
-            if (!userRole) {
-                UI.modal.style.display = 'flex';
-            }
-
-            const roleDisplay = userRole ? userRole.toUpperCase() : 'NONE';
-            UI.statusText.textContent = `ONLINE | PHASE: ${serverState.phase} | ROLE: ${roleDisplay}`;
+            UI.statusText.textContent = `MODE: TEST | PHASE: ${serverState.phase}`;
 
             document.querySelectorAll('.item-card').forEach(card => {
                 const id = card.dataset.id;
                 const item = ITEM_MAP[id];
-                card.className = 'item-card relative h-16 bg-white/5 border border-white/10 rounded flex flex-col items-center justify-center font-scifi font-bold text-sm select-none p-1';
+                card.className = 'item-card relative bg-white/5 border border-white/10 rounded flex flex-col items-center justify-between p-1.5 select-none';
+                
+                let contentHTML = `<span class="text-[10px] font-scifi text-center text-gray-200 truncate w-full px-1">${item.name}</span>`;
                 
                 if (item.img) {
-                    card.innerHTML = `<img src="${item.img}" alt="${item.name}" class="h-8 w-8 object-contain mb-1" onerror="this.onerror=null; this.replaceWith(Object.assign(document.createElement('span'), {textContent: '${item.short}'}));"><span>${item.short}</span>`;
+                    contentHTML += `<div class="flex-1 flex items-center justify-center my-0.5"><img src="${item.img}" alt="${item.name}" class="h-10 w-10 object-contain" onerror="this.onerror=null; this.replaceWith(Object.assign(document.createElement('span'), {textContent: '${item.short}', className: 'text-xs font-bold text-gray-400'}));"></div>`;
                 } else {
-                    card.innerHTML = `<span>${item.short}</span>`;
+                    contentHTML += `<div class="flex-1 flex items-center justify-center my-0.5"><span class="text-xs font-bold text-gray-400">${item.short}</span></div>`;
                 }
                 
+                card.innerHTML = contentHTML;
+
                 if (item.baseTroopId) {
                     const badge = document.createElement('span');
                     badge.className = 'super-troop-badge';
                     badge.textContent = 'SUPER';
                     card.appendChild(badge);
                 }
-                
-                const cat = item.category;
-                if(cat==='heroes') card.classList.add('text-yellow-400');
-                if(cat==='troops') card.classList.add('text-pink-400');
-                if(cat==='supertroops') card.classList.add('text-orange-400');
-                if(cat==='spells') card.classList.add('text-blue-400');
-                if(cat==='equips') card.classList.add('text-purple-400');
 
                 if (serverState.phase === 'BANS') {
                     if (localTempBans.includes(id)) {
@@ -563,7 +497,6 @@
                 else if (serverState.phase === 'REVEAL' || serverState.phase === 'PICKS' || serverState.phase === 'SUMMARY') {
                     if (isItemDisabled(id)) {
                         card.classList.add('banned');
-                        card.innerHTML = `<span class="opacity-50 line-through text-xs">${item.short}</span>`;
                     }
                     if (serverState.p1Picks.includes(id)) card.classList.add('picked-p1');
                     if (serverState.p2Picks.includes(id)) card.classList.add('picked-p2');
@@ -575,51 +508,27 @@
 
             UI.actionBtn.classList.add('hidden');
             UI.actionBtn.onclick = handleActionClick;
-            
-            document.getElementById('sidebar-p1').classList.remove('turn-pulse-p1');
-            document.getElementById('sidebar-p2').classList.remove('turn-pulse-p2');
 
-            if (serverState.phase === 'WAITING') {
-                UI.instructionText.innerHTML = "WARTE AUF SPIELER...";
-            }
-            else if (serverState.phase === 'BANS') {
-                const isLocked = (userRole === 'p1' && serverState.p1BansLocked) || (userRole === 'p2' && serverState.p2BansLocked);
-                if (userRole === 'spec') {
-                    UI.instructionText.innerHTML = "SPIELER WÄHLEN BANS...";
-                } else if (isLocked) {
-                    UI.instructionText.innerHTML = "WARTE AUF GEGNER...";
-                } else {
-                    const color = userRole === 'p1' ? 'text-neon-blue' : 'text-neon-purple';
-                    UI.instructionText.innerHTML = `Wähle deine 3 Bans (<span class="${color}">${localTempBans.length}/3</span>)`;
-                    if (localTempBans.length === 3) {
-                        UI.actionBtn.classList.remove('hidden');
-                        UI.actionBtn.textContent = 'LOCK BANS';
-                    }
+            if (serverState.phase === 'BANS') {
+                UI.instructionText.innerHTML = `Wähle 3 Bans (<span class="text-neon-blue">${localTempBans.length}/3</span>)`;
+                if (localTempBans.length === 3) {
+                    UI.actionBtn.classList.remove('hidden');
+                    UI.actionBtn.textContent = 'LOCK BANS';
                 }
             }
             else if (serverState.phase === 'REVEAL') {
-                UI.instructionText.innerHTML = "DAS SIND DIE GLOBALEN BANS (INKL. SUPER-TRUPPEN-VERKNÜPFUNG).";
-                if (userRole === 'p1' || userRole === 'p2') {
-                    UI.actionBtn.classList.remove('hidden');
-                    UI.actionBtn.textContent = 'WEITER ZU DEN PICKS';
-                }
+                UI.instructionText.innerHTML = "BANS GESPERRT. BEREIT FÜR PICKS.";
+                UI.actionBtn.classList.remove('hidden');
+                UI.actionBtn.textContent = 'STARTE PICKS';
             }
             else if (serverState.phase === 'PICKS') {
-                const activePlayer = PICK_SEQUENCE[serverState.pickIndex];
-                const pName = activePlayer === 'player1' ? 'Player 1' : 'Player 2';
-                const color = activePlayer === 'player1' ? 'text-neon-blue' : 'text-neon-purple';
-                
-                if((activePlayer === 'player1' && userRole === 'p1') || (activePlayer === 'player2' && userRole === 'p2')) {
-                    UI.instructionText.innerHTML = `<span class="${color}">DU BIST DRAN!</span> (Pick ${serverState.pickIndex + 1} von 6)`;
-                } else {
-                    UI.instructionText.innerHTML = `<span class="${color}">${pName} WÄHLT...</span>`;
-                }
-                
-                if (activePlayer === 'player1') document.getElementById('sidebar-p1').classList.add('turn-pulse-p1');
-                else document.getElementById('sidebar-p2').classList.add('turn-pulse-p2');
+                const isP1Turn = serverState.pickIndex % 2 === 0;
+                const pName = isP1Turn ? 'Player 1' : 'Player 2';
+                const color = isP1Turn ? 'text-neon-blue' : 'text-neon-purple';
+                UI.instructionText.innerHTML = `<span class="${color}">${pName} WÄHLT...</span> (Pick ${serverState.pickIndex + 1} / 6)`;
             }
             else if (serverState.phase === 'SUMMARY') {
-                UI.instructionText.innerHTML = "DRAFT BEENDET!";
+                UI.instructionText.innerHTML = "DRAFT ABGESCHLOSSEN!";
             }
         }
 
@@ -629,15 +538,7 @@
             const borderClass = isP1 ? 'border-neon-blue/30' : 'border-neon-purple/30';
             const statusEl = document.getElementById(`${isP1 ? 'p1' : 'p2'}-status`);
             
-            if (serverState.phase === 'WAITING') {
-                const isJoined = isP1 ? serverState.p1Id : serverState.p2Id;
-                statusEl.textContent = isJoined ? 'Ready' : 'Waiting...';
-            }
-            else if (serverState.phase === 'BANS') {
-                const isLocked = isP1 ? serverState.p1BansLocked : serverState.p2BansLocked;
-                statusEl.textContent = isLocked ? 'Locked' : 'Banning...';
-            }
-            else statusEl.textContent = 'Ready';
+            statusEl.textContent = 'Active (Test)';
             
             const banContainer = document.getElementById(`${isP1 ? 'p1' : 'p2'}-bans`);
             const countEl = document.getElementById(`${isP1 ? 'p1' : 'p2'}-ban-count`);
@@ -647,17 +548,10 @@
             let displayCount = 0;
             
             if (serverState.phase === 'BANS') {
-                if (isP1 && userRole === 'p1') { banList = localTempBans; displayCount = localTempBans.length; }
-                else if (!isP1 && userRole === 'p2') { banList = localTempBans; displayCount = localTempBans.length; }
-                else if (isP1 && serverState.p1BansLocked) { banList = ['?', '?', '?']; displayCount = 3; }
-                else if (!isP1 && serverState.p2BansLocked) { banList = ['?', '?', '?']; displayCount = 3; }
-            } 
-            else if (serverState.phase !== 'WAITING') {
-                const rawBans = isP1 ? serverState.p1Bans : serverState.p2Bans;
-                banList = rawBans.filter(bId => {
-                    const itm = ITEM_MAP[bId];
-                    return !itm.baseTroopId; 
-                }).slice(0, 3);
+                banList = localTempBans;
+                displayCount = localTempBans.length;
+            } else {
+                banList = (isP1 ? serverState.p1Bans : serverState.p2Bans).filter(bId => !ITEM_MAP[bId].baseTroopId).slice(0, 3);
                 displayCount = banList.length;
             }
 
@@ -665,17 +559,12 @@
 
             for(let i=0; i<3; i++) {
                 const box = document.createElement('div');
-                box.className = 'w-10 h-10 bg-black/50 border border-white/10 rounded flex items-center justify-center text-xs font-bold font-scifi text-red-500';
-                
+                box.className = 'w-10 h-10 bg-black/50 border border-white/10 rounded flex items-center justify-center text-[10px] font-bold font-scifi text-red-500 truncate p-0.5';
                 if (banList[i]) {
-                    if (banList[i] === '?') {
-                        box.textContent = '?';
-                        box.classList.add('border-red-500/30');
-                    } else {
-                        const item = ITEM_MAP[banList[i]];
-                        box.textContent = item ? item.short : '';
-                        box.classList.add('border-red-500/50', 'bg-red-500/10');
-                    }
+                    const item = ITEM_MAP[banList[i]];
+                    box.textContent = item ? item.name : '';
+                    box.title = item ? item.name : '';
+                    box.classList.add('border-red-500/50', 'bg-red-500/10');
                 }
                 banContainer.appendChild(box);
             }
@@ -686,7 +575,7 @@
             
             for(let i=0; i<3; i++) {
                 const box = document.createElement('div');
-                box.className = `h-12 bg-black/50 border ${borderClass} rounded flex items-center justify-center text-xs font-bold font-scifi ${colorClass} px-1 text-center`;
+                box.className = `h-12 bg-black/50 border ${borderClass} rounded flex items-center justify-center text-xs font-bold font-scifi ${colorClass} px-1 text-center truncate`;
                 if (picks[i]) {
                     const item = ITEM_MAP[picks[i]];
                     box.textContent = item.name;
@@ -702,15 +591,19 @@
         function buildGrids() {
             GAME_DATA.forEach(item => {
                 const el = document.createElement('div');
-                el.className = 'item-card relative h-16 bg-white/5 border border-white/10 rounded flex flex-col items-center justify-center font-scifi font-bold text-sm select-none p-1';
+                el.className = 'item-card relative bg-white/5 border border-white/10 rounded flex flex-col items-center justify-between p-1.5 select-none';
                 el.dataset.id = item.id;
                 el.title = item.name;
                 
+                let contentHTML = `<span class="text-[10px] font-scifi text-center text-gray-200 truncate w-full px-1">${item.name}</span>`;
+                
                 if (item.img) {
-                    el.innerHTML = `<img src="${item.img}" alt="${item.name}" class="h-8 w-8 object-contain mb-1" onerror="this.onerror=null; this.replaceWith(Object.assign(document.createElement('span'), {textContent: '${item.short}'}));"><span>${item.short}</span>`;
+                    contentHTML += `<div class="flex-1 flex items-center justify-center my-0.5"><img src="${item.img}" alt="${item.name}" class="h-10 w-10 object-contain" onerror="this.onerror=null; this.replaceWith(Object.assign(document.createElement('span'), {textContent: '${item.short}', className: 'text-xs font-bold text-gray-400'}));"></div>`;
                 } else {
-                    el.innerHTML = `<span>${item.short}</span>`;
+                    contentHTML += `<div class="flex-1 flex items-center justify-center my-0.5"><span class="text-xs font-bold text-gray-400">${item.short}</span></div>`;
                 }
+                
+                el.innerHTML = contentHTML;
                 
                 if (item.baseTroopId) {
                     const badge = document.createElement('span');
