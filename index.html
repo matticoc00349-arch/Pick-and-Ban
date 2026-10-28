@@ -271,28 +271,29 @@
                 id: `${prefix}${i+1}`,
                 name: `${namePrefix} ${i+1}`,
                 category: cat,
-                short: `${prefix.toUpperCase()}${i+1}`
+                short: `${prefix.toUpperCase()}${i+1}`,
+                img: null
             }));
         };
 
         const SUPER_TROOPS_DATA = [
-            { id: 'st1', name: 'Super Barbarian', category: 'supertroops', short: 'S.Barb', baseTroopId: 't1' },
-            { id: 'st2', name: 'Super Archer', category: 'supertroops', short: 'S.Arch', baseTroopId: 't2' },
-            { id: 'st3', name: 'Super Giant', category: 'supertroops', short: 'S.Giant', baseTroopId: 't3' },
-            { id: 'st4', name: 'Sneaky Goblin', category: 'supertroops', short: 'Sneaky', baseTroopId: 't4' },
-            { id: 'st5', name: 'Super Wall Breaker', category: 'supertroops', short: 'S.WB', baseTroopId: 't5' },
-            { id: 'st6', name: 'Rocket Balloon', category: 'supertroops', short: 'Rocket', baseTroopId: 't6' },
-            { id: 'st7', name: 'Super Wizard', category: 'supertroops', short: 'S.Wiz', baseTroopId: 't7' },
-            { id: 'st8', name: 'Super Dragon', category: 'supertroops', short: 'S.Drag', baseTroopId: 't8' },
-            { id: 'st9', name: 'Inferno Dragon', category: 'supertroops', short: 'Inf.Drag', baseTroopId: 't9' },
-            { id: 'st10', name: 'Super Minion', category: 'supertroops', short: 'S.Minion', baseTroopId: 't10' },
-            { id: 'st11', name: 'Super Valkyrie', category: 'supertroops', short: 'S.Valk', baseTroopId: 't11' },
-            { id: 'st12', name: 'Super Witch', category: 'supertroops', short: 'S.Witch', baseTroopId: 't12' },
-            { id: 'st13', name: 'Ice Hound', category: 'supertroops', short: 'IceHound', baseTroopId: 't13' },
-            { id: 'st14', name: 'Super Bowler', category: 'supertroops', short: 'S.Bowl', baseTroopId: 't14' },
-            { id: 'st15', name: 'Super Hog Rider', category: 'supertroops', short: 'S.Hog', baseTroopId: 't15' },
-            { id: 'st16', name: 'Headhunter', category: 'supertroops', short: 'Headh.', baseTroopId: 't16' },
-            { id: 'st17', name: 'Apprentice Warden', category: 'supertroops', short: 'App.Ward', baseTroopId: 't17' }
+            { id: 'st1', name: 'Super Barbarian', category: 'supertroops', short: 'S.Barb', baseTroopId: 't1', img: null },
+            { id: 'st2', name: 'Super Archer', category: 'supertroops', short: 'S.Arch', baseTroopId: 't2', img: null },
+            { id: 'st3', name: 'Sneaky Goblin', category: 'supertroops', short: 'Sneaky', baseTroopId: 't4', img: null },
+            { id: 'st4', name: 'Super Wall Breaker', category: 'supertroops', short: 'S.WB', baseTroopId: 't5', img: null },
+            { id: 'st5', name: 'Super Giant', category: 'supertroops', short: 'S.Giant', baseTroopId: 't3', img: null },
+            { id: 'st6', name: 'Rocket Balloon', category: 'supertroops', short: 'Rocket', baseTroopId: 't6', img: null },
+            { id: 'st7', name: 'Super Wizard', category: 'supertroops', short: 'S.Wiz', baseTroopId: 't7', img: null },
+            { id: 'st8', name: 'Super Dragon', category: 'supertroops', short: 'S.Drag', baseTroopId: 't8', img: null },
+            { id: 'st9', name: 'Inferno Dragon', category: 'supertroops', short: 'Inf.Drag', baseTroopId: 't9', img: null },
+            { id: 'st10', name: 'Super Minion', category: 'supertroops', short: 'S.Minion', baseTroopId: 't10', img: null },
+            { id: 'st11', name: 'Super Valkyrie', category: 'supertroops', short: 'S.Valk', baseTroopId: 't11', img: null },
+            { id: 'st12', name: 'Super Witch', category: 'supertroops', short: 'S.Witch', baseTroopId: 't12', img: null },
+            { id: 'st13', name: 'Ice Hound', category: 'supertroops', short: 'IceHound', baseTroopId: 't13', img: null },
+            { id: 'st14', name: 'Super Bowler', category: 'supertroops', short: 'S.Bowl', baseTroopId: 't14', img: null },
+            { id: 'st15', name: 'Super Miner', category: 'supertroops', short: 'S.Miner', baseTroopId: 't15', img: null },
+            { id: 'st16', name: 'Super Yeti', category: 'supertroops', short: 'S.Yeti', baseTroopId: 't16', img: null },
+            { id: 'st17', name: 'Super Hog Rider', category: 'supertroops', short: 'S.Hog', baseTroopId: 't17', img: null }
         ];
 
         const GAME_DATA = [
@@ -415,7 +416,6 @@
 
         function handleItemClick(itemId) {
             if (!serverState || userRole === 'spec') return;
-
             if (isItemDisabled(itemId)) return;
 
             if (serverState.phase === 'BANS') {
@@ -534,7 +534,12 @@
                 const id = card.dataset.id;
                 const item = ITEM_MAP[id];
                 card.className = 'item-card relative h-16 bg-white/5 border border-white/10 rounded flex flex-col items-center justify-center font-scifi font-bold text-sm select-none p-1';
-                card.innerHTML = `<span>${item.short}</span>`;
+                
+                if (item.img) {
+                    card.innerHTML = `<img src="${item.img}" alt="${item.name}" class="h-8 w-8 object-contain mb-1"><span>${item.short}</span>`;
+                } else {
+                    card.innerHTML = `<span>${item.short}</span>`;
+                }
                 
                 if (item.baseTroopId) {
                     const badge = document.createElement('span');
@@ -700,7 +705,12 @@
                 el.className = 'item-card relative h-16 bg-white/5 border border-white/10 rounded flex flex-col items-center justify-center font-scifi font-bold text-sm select-none p-1';
                 el.dataset.id = item.id;
                 el.title = item.name;
-                el.innerHTML = `<span>${item.short}</span>`;
+                
+                if (item.img) {
+                    el.innerHTML = `<img src="${item.img}" alt="${item.name}" class="h-8 w-8 object-contain mb-1"><span>${item.short}</span>`;
+                } else {
+                    el.innerHTML = `<span>${item.short}</span>`;
+                }
                 
                 if (item.baseTroopId) {
                     const badge = document.createElement('span');
