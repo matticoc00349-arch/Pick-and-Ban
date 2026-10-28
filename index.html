@@ -61,13 +61,13 @@
         ::-webkit-scrollbar-thumb { background: rgba(0, 243, 255, 0.3); border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: rgba(0, 243, 255, 0.6); }
 
-        /* Item Cards */
+        /* Item Cards - Größere Kacheln */
         .item-card {
             transition: all 0.2s ease-in-out;
             cursor: pointer;
             position: relative;
             overflow: hidden;
-            height: 95px;
+            height: 110px;
         }
         .item-card::before {
             content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 100%);
@@ -84,7 +84,7 @@
         .item-card.selected-ban {
             border-color: #ff003c;
             box-shadow: 0 0 15px rgba(255, 0, 60, 0.5);
-            opacity: 0.9;
+            background: rgba(255, 0, 60, 0.1);
         }
 
         .item-card.banned {
@@ -168,25 +168,25 @@
     <main class="flex-1 flex overflow-hidden relative">
         
         <!-- Player 1 Sidebar -->
-        <aside id="sidebar-p1" class="w-64 glass-panel border-r border-white/5 p-5 flex flex-col gap-4 z-10 transition-all duration-300">
+        <aside id="sidebar-p1" class="w-72 glass-panel border-r border-white/5 p-5 flex flex-col gap-4 z-10 transition-all duration-300">
             <div class="text-center pb-4 border-b border-white/10">
                 <h2 class="font-scifi text-xl text-neon-blue font-bold tracking-wider drop-shadow-[0_0_5px_rgba(0,243,255,0.5)]">PLAYER 1</h2>
                 <div id="p1-status" class="text-[10px] text-gray-500 uppercase tracking-widest mt-1 font-bold">Waiting...</div>
             </div>
             
-            <div class="flex-1 flex flex-col gap-3">
+            <div class="flex-1 flex flex-col gap-2">
                 <h3 class="text-xs text-gray-400 uppercase tracking-widest mb-1 flex items-center gap-2">
-                    <i class="ph ph-sword text-neon-blue"></i> Loadout
+                    <i class="ph ph-sword text-neon-blue"></i> Loadout (Picks)
                 </h3>
-                <div id="p1-picks" class="flex flex-col gap-3"></div>
+                <div id="p1-picks" class="flex flex-col gap-2.5"></div>
             </div>
 
             <div class="h-auto border-t border-white/10 pt-4">
-                <h3 class="text-xs text-gray-400 uppercase tracking-widest mb-3 flex justify-between items-center">
+                <h3 class="text-xs text-gray-400 uppercase tracking-widest mb-2 flex justify-between items-center">
                     <span class="flex items-center gap-2"><i class="ph ph-prohibit text-red-500"></i> Bans</span>
                     <span id="p1-ban-count" class="text-[10px] bg-red-500/20 px-2 py-0.5 rounded text-red-400">0/3</span>
                 </h3>
-                <div id="p1-bans" class="flex justify-between gap-2"></div>
+                <div id="p1-bans" class="grid grid-cols-3 gap-2"></div>
             </div>
         </aside>
 
@@ -214,34 +214,34 @@
 
             <!-- Item Grids -->
             <div class="flex-1 overflow-y-auto p-6 lg:p-8 relative">
-                <div id="grid-heroes" class="category-grid grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-3 lg:gap-4"></div>
-                <div id="grid-troops" class="category-grid grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-8 gap-3 lg:gap-4 hidden"></div>
-                <div id="grid-supertroops" class="category-grid grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-3 lg:gap-4 hidden"></div>
-                <div id="grid-spells" class="category-grid grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-8 gap-3 lg:gap-4 hidden"></div>
-                <div id="grid-equips" class="category-grid grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-8 gap-3 lg:gap-4 hidden"></div>
+                <div id="grid-heroes" class="category-grid grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 lg:gap-4"></div>
+                <div id="grid-troops" class="category-grid grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-8 gap-3 lg:gap-4 hidden"></div>
+                <div id="grid-supertroops" class="category-grid grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 lg:gap-4 hidden"></div>
+                <div id="grid-spells" class="category-grid grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-8 gap-3 lg:gap-4 hidden"></div>
+                <div id="grid-equips" class="category-grid grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-8 gap-3 lg:gap-4 hidden"></div>
             </div>
         </section>
 
         <!-- Player 2 Sidebar -->
-        <aside id="sidebar-p2" class="w-64 glass-panel border-l border-white/5 p-5 flex flex-col gap-4 z-10 transition-all duration-300">
+        <aside id="sidebar-p2" class="w-72 glass-panel border-l border-white/5 p-5 flex flex-col gap-4 z-10 transition-all duration-300">
             <div class="text-center pb-4 border-b border-white/10">
                 <h2 class="font-scifi text-xl text-neon-purple font-bold tracking-wider drop-shadow-[0_0_5px_rgba(188,19,254,0.5)]">PLAYER 2</h2>
                 <div id="p2-status" class="text-[10px] text-gray-500 uppercase tracking-widest mt-1 font-bold">Waiting...</div>
             </div>
             
-            <div class="flex-1 flex flex-col gap-3">
+            <div class="flex-1 flex flex-col gap-2">
                 <h3 class="text-xs text-gray-400 uppercase tracking-widest mb-1 flex items-center gap-2">
-                    <i class="ph ph-sword text-neon-purple"></i> Loadout
+                    <i class="ph ph-sword text-neon-purple"></i> Loadout (Picks)
                 </h3>
-                <div id="p2-picks" class="flex flex-col gap-3"></div>
+                <div id="p2-picks" class="flex flex-col gap-2.5"></div>
             </div>
 
             <div class="h-auto border-t border-white/10 pt-4">
-                <h3 class="text-xs text-gray-400 uppercase tracking-widest mb-3 flex justify-between items-center">
+                <h3 class="text-xs text-gray-400 uppercase tracking-widest mb-2 flex justify-between items-center">
                     <span class="flex items-center gap-2"><i class="ph ph-prohibit text-red-500"></i> Bans</span>
                     <span id="p2-ban-count" class="text-[10px] bg-red-500/20 px-2 py-0.5 rounded text-red-400">0/3</span>
                 </h3>
-                <div id="p2-bans" class="flex justify-between gap-2"></div>
+                <div id="p2-bans" class="grid grid-cols-3 gap-2"></div>
             </div>
         </aside>
     </main>
@@ -483,21 +483,18 @@
                     updates.p1Bans = localTempBans;
                     updates.p1BansLocked = true;
                     if (serverState.p2BansLocked) {
-                        updates.phase = 'REVEAL';
+                        updates.phase = 'PICKS';
                         updates.globalBans = [...new Set([...localTempBans, ...serverState.p2Bans])];
                     }
                 } else if (userRole === 'p2') {
                     updates.p2Bans = localTempBans;
                     updates.p2BansLocked = true;
                     if (serverState.p1BansLocked) {
-                        updates.phase = 'REVEAL';
+                        updates.phase = 'PICKS';
                         updates.globalBans = [...new Set([...serverState.p1Bans, ...localTempBans])];
                     }
                 }
                 updateServer(updates);
-            }
-            else if (serverState.phase === 'REVEAL') {
-                updateServer({ phase: 'PICKS' });
             }
         }
 
@@ -514,14 +511,14 @@
             document.querySelectorAll('.item-card').forEach(card => {
                 const id = card.dataset.id;
                 const item = ITEM_MAP[id];
-                card.className = 'item-card relative bg-white/5 border border-white/10 rounded flex flex-col items-center justify-between p-1.5 select-none';
+                card.className = 'item-card relative bg-white/5 border border-white/10 rounded flex flex-col items-center justify-between p-2 select-none';
                 
-                let contentHTML = `<span class="text-[10px] font-scifi text-center text-gray-200 truncate w-full px-1">${item.name}</span>`;
+                let contentHTML = `<span class="text-[11px] font-scifi text-center text-gray-200 truncate w-full px-1">${item.name}</span>`;
                 
                 if (item.img) {
-                    contentHTML += `<div class="flex-1 flex items-center justify-center my-0.5"><img src="${item.img}" alt="${item.name}" class="h-10 w-10 object-contain" onerror="this.onerror=null; this.src='https://placehold.co/40x40/111827/00f3ff?text=${item.short}';"></div>`;
+                    contentHTML += `<div class="flex-1 flex items-center justify-center my-1"><img src="${item.img}" alt="${item.name}" class="h-14 w-14 object-contain" onerror="this.onerror=null; this.src='https://placehold.co/56x56/111827/00f3ff?text=${item.short}';"></div>`;
                 } else {
-                    contentHTML += `<div class="flex-1 flex items-center justify-center my-0.5"><span class="text-xs font-bold text-gray-400">${item.short}</span></div>`;
+                    contentHTML += `<div class="flex-1 flex items-center justify-center my-1"><span class="text-sm font-bold text-gray-400">${item.short}</span></div>`;
                 }
                 
                 card.innerHTML = contentHTML;
@@ -538,7 +535,7 @@
                         card.classList.add('selected-ban');
                     }
                 } 
-                else if (serverState.phase === 'REVEAL' || serverState.phase === 'PICKS' || serverState.phase === 'SUMMARY') {
+                else if (serverState.phase === 'PICKS' || serverState.phase === 'SUMMARY') {
                     if (isItemDisabled(id)) {
                         card.classList.add('banned');
                     }
@@ -572,13 +569,6 @@
                         UI.actionBtn.classList.remove('hidden');
                         UI.actionBtn.textContent = 'LOCK BANS';
                     }
-                }
-            }
-            else if (serverState.phase === 'REVEAL') {
-                UI.instructionText.innerHTML = "DAS SIND DIE GLOBALEN BANS.";
-                if (userRole === 'p1' || userRole === 'p2') {
-                    UI.actionBtn.classList.remove('hidden');
-                    UI.actionBtn.textContent = 'WEITER ZU DEN PICKS';
                 }
             }
             else if (serverState.phase === 'PICKS') {
@@ -638,16 +628,18 @@
 
             for(let i=0; i<3; i++) {
                 const box = document.createElement('div');
-                box.className = 'w-10 h-10 bg-black/50 border border-white/10 rounded flex items-center justify-center text-xs font-bold font-scifi text-red-500';
+                box.className = 'h-14 bg-black/50 border border-red-500/40 rounded flex items-center justify-center overflow-hidden relative';
                 
                 if (banList[i]) {
                     if (banList[i] === '?') {
-                        box.textContent = '?';
-                        box.classList.add('border-red-500/30');
+                        box.innerHTML = '<span class="text-xs font-bold font-scifi text-red-500">?</span>';
                     } else {
                         const item = ITEM_MAP[banList[i]];
-                        box.textContent = item.short;
-                        box.classList.add('border-red-500/50', 'bg-red-500/10');
+                        if (item && item.img) {
+                            box.innerHTML = `<img src="${item.img}" alt="${item.name}" class="h-10 w-10 object-contain" title="${item.name}">`;
+                        } else if (item) {
+                            box.innerHTML = `<span class="text-[10px] font-bold font-scifi text-red-400 text-center">${item.short}</span>`;
+                        }
                     }
                 }
                 banContainer.appendChild(box);
@@ -659,14 +651,15 @@
             
             for(let i=0; i<3; i++) {
                 const box = document.createElement('div');
-                box.className = `h-12 bg-black/50 border ${borderClass} rounded flex items-center justify-center text-xs font-bold font-scifi ${colorClass} px-2 text-center`;
+                box.className = `h-14 bg-black/50 border ${borderClass} rounded flex items-center px-2 gap-2 text-xs font-bold font-scifi ${colorClass}`;
                 if (picks[i]) {
                     const item = ITEM_MAP[picks[i]];
-                    box.textContent = item.name;
+                    let imgTag = item.img ? `<img src="${item.img}" class="h-10 w-10 object-contain">` : '';
+                    box.innerHTML = `${imgTag} <span class="truncate">${item.name}</span>`;
                     box.classList.add(isP1 ? 'bg-neon-blue/10' : 'bg-neon-purple/10');
                 } else {
                     box.classList.add('opacity-30');
-                    box.textContent = '---';
+                    box.innerHTML = '<span class="w-full text-center">---</span>';
                 }
                 pickContainer.appendChild(box);
             }
@@ -675,16 +668,16 @@
         function buildGrids() {
             GAME_DATA.forEach(item => {
                 const el = document.createElement('div');
-                el.className = 'item-card relative bg-white/5 border border-white/10 rounded flex flex-col items-center justify-between p-1.5 select-none';
+                el.className = 'item-card relative bg-white/5 border border-white/10 rounded flex flex-col items-center justify-between p-2 select-none';
                 el.dataset.id = item.id;
                 el.title = item.name;
                 
-                let contentHTML = `<span class="text-[10px] font-scifi text-center text-gray-200 truncate w-full px-1">${item.name}</span>`;
+                let contentHTML = `<span class="text-[11px] font-scifi text-center text-gray-200 truncate w-full px-1">${item.name}</span>`;
                 
                 if (item.img) {
-                    contentHTML += `<div class="flex-1 flex items-center justify-center my-0.5"><img src="${item.img}" alt="${item.name}" class="h-10 w-10 object-contain" onerror="this.onerror=null; this.src='https://placehold.co/40x40/111827/00f3ff?text=${item.short}';"></div>`;
+                    contentHTML += `<div class="flex-1 flex items-center justify-center my-1"><img src="${item.img}" alt="${item.name}" class="h-14 w-14 object-contain" onerror="this.onerror=null; this.src='https://placehold.co/56x56/111827/00f3ff?text=${item.short}';"></div>`;
                 } else {
-                    contentHTML += `<div class="flex-1 flex items-center justify-center my-0.5"><span class="text-xs font-bold text-gray-400">${item.short}</span></div>`;
+                    contentHTML += `<div class="flex-1 flex items-center justify-center my-1"><span class="text-sm font-bold text-gray-400">${item.short}</span></div>`;
                 }
                 
                 el.innerHTML = contentHTML;
